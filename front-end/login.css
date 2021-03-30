@@ -32,6 +32,10 @@ ul {
 	list-style: none;
 }
 
+.logo {
+	width: 100px;
+}
+
 .login-header {
 	height: 30px;
 	display: flex;
@@ -177,4 +181,8 @@ ul {
 .login-footer a:hover {
 	color: var(--footer-font-color);
 	border-bottom: 1px solid var(--green-std);
+}
+
+footer img {
+	width: 80px;
 }

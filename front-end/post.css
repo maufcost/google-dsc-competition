@@ -32,6 +32,10 @@ ul {
 	list-style: none;
 }
 
+.logo {
+	width: 100px;
+}
+
 .dashboard-header {
 	height: 30px;
 	display: flex;
