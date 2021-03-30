@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Hello, Drink Whisky | Home</title>
+		<link rel="stylesheet" href="./landing.css">
+	</head>
+	<body>
+		<header class='landing-header'>
+			<img class='logo' src='./static/logo.svg' />
+			<ul>
+				<li><a href='/all-posts'>INITIATIVES</a></li>
+				<li><a href='/all-posts'>LEADERBOARD</a></li>
+				<li><a class='special-link' href='/login'>LOGIN</a></li>
+			</ul>
+		</header>
+
+		<main class='landing-main'>
+
+			<section>
+				<h1>More than <span id='num-init'>250,000</span> sustainable initiatives created</h1>
+				<h1>More than <span id='num-companies'>100,000</span> companies participating</h1>
+				<p>We only have one world. For now.</p>
+				<button>Join Now</button>
+			</section>
+
+			<section>
+			</section>
+		</main>
+
+		<footer class='landing-footer'>
+			<p>Logo, inc &copy;</p>
+			<ul>
+				<li><a href='/all-posts'>Initiatives</a></li>
+				<li><a href='/all-posts'>Leaderboard</a></li>
+				<li><a href='/login'>Contact</a></li>
+				<li><a href='/login'>Support</a></li>
+				<li><a href='/login'>Login</a></li>
+			</ul>
+		</footer>
+
+		<script>
+			const numInit = document.getElementById('num-init');
+			const numCompanies = document.getElementById('num-companies');
+
+			const initVals = ['250,000', '250,001', '250,002', '250,003', '250,010', '250,015', '250,018', '250,020', '250,031'];
+
+			const initComps = ['100,001', '100,003', '100,005', '100,006', '100,008', '100,011', '100,012', '100,015', '100,029'];
+
+			for (let i = 0; i < initVals.length; i++) {
+				setTimeout(() => {
+					numInit.innerHTML = initVals[i];
+				}, i * 1000);
+			}
+
+			for (let i = 0; i < initComps.length; i++) {
+				setTimeout(() => {
+					numCompanies.innerHTML = initComps[i];
+				}, i * 2000);
+			}
+		</script>
+	</body>
+</html>
