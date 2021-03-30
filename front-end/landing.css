@@ -54,7 +54,7 @@ ul {
 .landing-header ul li a {
 	text-decoration: none;
 	transition: 0.5s;
-	color: var(--std-grey-one);
+	color: var(--footer-font-color);
 	font-size: 0.8em;
 }
 
