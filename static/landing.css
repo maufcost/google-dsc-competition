@@ -92,6 +92,7 @@ ul {
 	bottom: 0;
 	z-index: -1;
 	background: url('images/trophybg.png');
+	background-repeat: no-repeat;
 }
 
 .landing-main section h1 {
