@@ -4,6 +4,13 @@
 		<meta charset="utf-8">
 		<title>Report Hive | Landing Page</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+
+		<style>
+			a{
+				text-decoration: none;
+			}
+		</style>
+
 	</head>
 	<body>
 		<header class='landing-header'>
@@ -21,7 +28,7 @@
 				<h1>More than <span id='num-init'>250,000</span> sustainable initiatives created</h1>
 				<h1>More than <span id='num-companies'>100,000</span> companies participating</h1>
 				<p>We only have one world. For now.</p>
-				<a href="/login"><button>Join Now</button></a>	
+				<a href="/login"><button>Join Now</button></a>
 			</section>
 
 			<section>
@@ -43,7 +50,7 @@
 			const numInit = document.getElementById('num-init');
 			const numCompanies = document.getElementById('num-companies');
 
-			const initVals = ['250,000', '250,001', '250,002', '250,003', '250,010', '250,015', '250,018', '250,020', '250,031'];
+			const initVals = ['250,000', '250,001', '250,002', '250,003', '250,010', '250,015', '250,018', '250,020', '250,031', '250,118', '250,120', '250,131'];
 
 			const initComps = ['100,001', '100,003', '100,005', '100,006', '100,008', '100,011', '100,012', '100,015', '100,029'];
 

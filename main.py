@@ -88,10 +88,10 @@ def create_user(email, name):
     return random_uid
 
 # Returns sorted list of users with the most amount of posts
-def get_users_sorted_by_post_count():
+def get_users_sorted_by_post_count(limit=10):
     query = datastore_client.query(kind='User')
     query.order = ["-posts"] #Order by timestamp from the most recent first
-    results = list(query.fetch(limit=10))
+    results = list(query.fetch(limit=limit))
     return results
 
 # Attemps to get an user by the email.
@@ -135,7 +135,7 @@ def get_post_by_id(pid):
 
 def get_posts():
     query = datastore_client.query(kind='Posts')
-    query.order = ["ts"] #Order by timestamp from the most recent first
+    query.order = ["-ts"] #Order by timestamp from the most recent first
     results = list(query.fetch())
     return results
 # Future Feature
@@ -267,11 +267,13 @@ def individual_post_page(pid):
             # If there's no valid user data, this person needs to register first
             if user_data != False:
                 the_post = get_post_by_id(pid)
+                leaderboard = get_users_sorted_by_post_count(limit=10)
                 print(the_post)
+                print(leaderboard)
                 # print(all_posts[0].key)
                 # print(all_posts[0].key.__dict__)
 
-                return render_template('post.html', user_data=user_data, post=the_post)
+                return render_template('post.html', user_data=user_data, post=the_post, leaders=leaderboard)
             else:
                 return redirect("/")
 
@@ -298,11 +300,12 @@ def all_posts_page():
             # If there's no valid user data, this person needs to register first
             if user_data != False:
                 all_posts = get_posts()
+                leaderboard = get_users_sorted_by_post_count(limit=10)
                 print(all_posts)
                 # print(all_posts[0].key)
                 # print(all_posts[0].key.__dict__)
 
-                return render_template('dashboard.html', user_data=user_data, posts=all_posts)
+                return render_template('dashboard.html', user_data=user_data, posts=all_posts, leaders=leaderboard)
             else:
                 return redirect("/")
 
@@ -364,6 +367,10 @@ def root():
             error_message = str(exc)
 
     return render_template('landing.html', user_data=claims, error_message=error_message)
+
+@app.route('/logout')
+def logout_page():
+    return render_template('login.html')
 
 @app.route('/login')
 def login_page():
