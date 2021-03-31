@@ -249,7 +249,7 @@ def register_page():
 
     return render_template('login.html', user_data=claims, error_message=error_message)
 
-@app.route('/newuser', methods=['POSt'])
+@app.route('/newuser', methods=['POST'])
 def add_user_to_db():
     # create_user(email, name, type, cid, pic_id):
     email = request.form.get('email')

@@ -2,14 +2,14 @@
 <html lang="en" dir="ltr">
 	<head>
 		<meta charset="utf-8">
-		<title>Hello, Drink Whisky | Home</title>
-		<link rel="stylesheet" href="./post.css">
+		<title>Report Hive | Post</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='post.css') }}">
 		<script src="https://kit.fontawesome.com/cf30b19bdf.js" crossorigin="anonymous"></script>
 	</head>
 	<body>
 
 		<header class='dashboard-header'>
-			<img class='logo' src='./static/logo1.png' />
+			<img class='logo' src="{{ url_for('static', filename='images/logo1.png') }}" />
 			<ul>
 				<li><a href='/all-posts'>INITIATIVES</a></li>
 				<li><a href='/all-posts'>LEADERBOARD</a></li>
@@ -32,7 +32,7 @@
 				<div class='feed-content-container'>
 					<div class='feed-content'>
 						<div class='post'>
-							<img src='./static/food.jpeg' />
+							<img src="{{ url_for('static', filename='images/food.jpeg') }}"/>
 							<div class='content'>
 								<div class='content-gist'>
 									<h1>How Google distributes extra energy</h1>
@@ -45,7 +45,7 @@
 								<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur</p>
 							</div>
 
-							<img class='article-img' src='./static/any-image-you-need-or-want'>
+							<img class='article-img' src="{{ url_for('static', filename='images/any-image-you-need-or-want.png') }}"
 
 							<div class='content-two'>
 								<h2>How to apply that to your own business?</h2>
@@ -58,7 +58,7 @@
 
 				<section class='leaderboard-summary'>
 					<div class='position-one'>
-						<img src='./static/trophy.png'/>
+						<img src="{{ url_for('static', filename='images/trophy.png') }}"/>
 						<div>
 							<h1>Google</h1>
 							<small>With more than 123123 trees saved, nuaisda wattts bla asd</small>

@@ -2,14 +2,14 @@
 <html lang="en" dir="ltr">
 	<head>
 		<meta charset="utf-8">
-		<title>Hello, Drink Whisky | Home</title>
-		<link rel="stylesheet" href="./dashboard.css">
+		<title>Report Hive | Home</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
 		<script src="https://kit.fontawesome.com/cf30b19bdf.js" crossorigin="anonymous"></script>
 	</head>
 	<body>
 
 		<header class='dashboard-header'>
-			<img class='logo' src='./static/logo1.png' />
+			<img class='logo' src="{{ url_for('static', filename='images/logo1.png') }}"/>
 			<ul>
 				<li><a href='/all-posts'>INITIATIVES</a></li>
 				<li><a href='/all-posts'>LEADERBOARD</a></li>
@@ -40,7 +40,7 @@
 
 					<div class='feed-content'>
 						<div class='post'>
-							<img src='./static/food.jpeg' />
+							<img src="{{ url_for('static', filename='images/food.jpeg') }}" />
 							<div class='content'>
 								<div class='content-gist'>
 									<h1>How Google distributes extra energy</h1>
@@ -51,7 +51,7 @@
 						</div>
 
 						<div class='post'>
-							<img src='./static/solar.jpeg' />
+							<img src="{{ url_for('static', filename='images/solar.jpeg') }}"/>
 							<div class='content'>
 								<div class='content-gist'>
 									<h1>How Google distributes extra energy</h1>
@@ -62,7 +62,7 @@
 						</div>
 
 						<div class='post'>
-							<img src='./static/food.jpeg' />
+							<img src="{{ url_for('static', filename='images/food.jpeg') }}" />
 							<div class='content'>
 								<div class='content-gist'>
 									<h1>How Google distributes extra energy</h1>
@@ -73,7 +73,7 @@
 						</div>
 
 						<div class='post'>
-							<img src='./static/solar.jpeg' />
+							<img src="{{ url_for('static', filename='images/solar.jpeg') }}"/>
 							<div class='content'>
 								<div class='content-gist'>
 									<h1>How Google distributes extra energy</h1>
@@ -87,7 +87,7 @@
 
 				<section class='leaderboard-summary'>
 					<div class='position-one'>
-						<img src='./static/trophy.png'/>
+						<img src="{{ url_for('static', filename='images/trophy.png') }}"/>
 						<div>
 							<h1>Google</h1>
 							<small>With more than 123123 trees saved, nuaisda wattts bla asd</small>
