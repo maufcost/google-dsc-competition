@@ -77,7 +77,8 @@ def create_user(email, name):
     # Commented keys are for future features
     task.update({
         'uid': random_uid,
-        'name': name
+        'name': name,
+        'posts' : 0
         # 'type': type
         #'cid': cid,
         #'pic_id': pic_id
@@ -85,6 +86,13 @@ def create_user(email, name):
 
     datastore_client.put(task)
     return random_uid
+
+# Returns sorted list of users with the most amount of posts
+def get_users_sorted_by_post_count():
+    query = datastore_client.query(kind='User')
+    query.order = ["-posts"] #Order by timestamp from the most recent first
+    results = list(query.fetch(limit=10))
+    return results
 
 # Attemps to get an user by the email.
 # If the email is not in the database, it returns False
@@ -276,6 +284,7 @@ def individual_post_page(pid):
 
 @app.route('/all-posts')
 def all_posts_page():
+    print(get_users_sorted_by_post_count())
     id_token = request.cookies.get("token") # Check for firebase token
     error_message = None
     claims = None
