@@ -4,7 +4,48 @@
 		<meta charset="utf-8">
 		<title>Report Hive | Login</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
-	</head>
+
+
+		<!-- The core Firebase JS SDK is always required and must be listed first -->
+		<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+
+	   <!-- Add Firebase products that you want to use -->
+	   <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+	   <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+
+		 <script src="https://www.gstatic.com/firebasejs/ui/4.4.0/firebase-ui-auth.js"></script>
+ 	 	 <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.4.0/firebase-ui-auth.css" />
+		<script>
+		  // Your web app's Firebase configuration
+		  var firebaseConfig = {
+		    apiKey: "AIzaSyAYIymL5zN693iyeakZliKZqylCOXXJorI",
+		    authDomain: "reporthive.firebaseapp.com",
+		    projectId: "reporthive",
+		    storageBucket: "reporthive.appspot.com",
+		    messagingSenderId: "863389324498",
+		    appId: "1:863389324498:web:0ba33dded772be5491090b"
+		  };
+		  // Initialize Firebase
+		  firebase.initializeApp(firebaseConfig);
+		</script>
+		<script>
+			if (typeof firebase === 'undefined') {
+				const msg = "Please paste the Firebase initialization snippet into index.html. See https://console.firebase.google.com > Overview > Add Firebase to your web app.";
+				console.log(msg);
+				alert(msg);
+			}
+		</script>
+		<!-- [START gae_python37_auth_include_firebaseui] -->
+		<script src="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.js"></script>
+		<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.css">
+
+		<script src="{{ url_for('static', filename='script.js') }}"></script>
+		<style media="screen">
+		.firebaseui-idp-google>.firebaseui-idp-text{
+			color:white;
+		}
+		</style>
+		</head>
 	<body>
 
 		<header class='login-header'>
@@ -19,12 +60,14 @@
 		<main class='login-main'>
 			<section>
 				<img class='logo' src="{{ url_for('static', filename='images/logo1.png') }}" />
-				<p>Sign in</p>
-				<input type='text' /><br/>
-				<input type='password' /><br />
-				<button>Sign in</button><br />
+				<p>Use your Google Account to Sign-in</p>
+				<div id="firebaseui-auth-container"></div>
+				<div id="login-info" hidden=true>
+					<a href="/dash"><button>Click Here To Go to HomePage!</a></button>
+				</div>
+				<button id="sign-out" hidden='true'>Sign Out</button>
 				<!-- Put sign in with google thingy here (don't forget to add a margin top of 15px to it) -->
-				<small><a href='/'>Still don't have an account? Create one for free and save this world</a></small>
+				<small><a href='/'>Report Hive | Promoting Sustainability Reporting</a></small>
 			</section>
 		</main>
 
