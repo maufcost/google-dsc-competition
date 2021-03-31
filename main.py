@@ -163,6 +163,13 @@ def dislike_post(postid, uid):
     key = datastore_client.key('Likes',the_key)
     datastore_client.delete(key)
 
+def increment_post_count(uid):
+    query = datastore_client.query(kind='User')
+    query.add_filter('uid', '=', uid)
+    results = list(query.fetch())
+    user = results[0]
+    user['posts'] += 1
+    datastore_client.put(user)
 # Future Feature
 
 # Get the list of users that liked the post
@@ -392,6 +399,7 @@ def add_user_to_db():
         upload_blob(blobdata, mid)
 
     create_post(uid, mid, title, desc)
+    increment_post_count(uid)
     return redirect("/all-posts")
 
 ####################{SERVER FUNCTIONS END HERE}#########################
