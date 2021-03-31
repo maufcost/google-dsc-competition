@@ -99,7 +99,8 @@ main .logo {
 	left: 0;
 	bottom: 0;
 	z-index: -1;
-	background: url('./static/green-sash.png');
+	background: url('images/green-sash.png');
+	background-repeat: no-repeat;
 }
 
 .login-main section {

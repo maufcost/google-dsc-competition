@@ -199,6 +199,23 @@ def add_person_to_cid(email, cid):
 
 ####################{SERVER FUNCTIONS BEGIN HERE}#########################
 
+# Test template pages
+@app.route('/dash')
+def quick_dash():
+    return render_template('dashboard.html')
+
+@app.route('/land')
+def quick_land():
+    return render_template('landing.html')
+
+@app.route('/log')
+def quick_log():
+    return render_template('login.html')
+
+@app.route('/post')
+def quick_post():
+    return render_template('post.html')
+
 @app.route('/')
 def root():
     id_token = request.cookies.get("token") # Check for firebase token
@@ -224,54 +241,54 @@ def root():
             error_message = str(exc)
 
     return render_template('login.html', user_data=claims, error_message=error_message)
-
-@app.route('/register')
-def register_page():
-    id_token = request.cookies.get("token") # Check for firebase token
-    error_message = None
-    claims = None
-
-    if id_token:
-        try:
-            # Verify the token against the Firebase Auth API.
-            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-            user_data = get_user(claims['email'])
-
-            # If there's no valid user data, this person needs to register first
-            if user_data != False:
-                return redirect("/otherpage") #This user already exists, just go to homepage.
-
-            else: # User will have a form to fill up the information there
-                return render_template('register.html', user_data=claims, error_message=error_message)
-
-        except ValueError as exc:
-            error_message = str(exc)
-
-    return render_template('login.html', user_data=claims, error_message=error_message)
-
-@app.route('/newuser', methods=['POST'])
-def add_user_to_db():
-    # create_user(email, name, type, cid, pic_id):
-    email = request.form.get('email')
-    name = request.form.get('name')
-    type = request.form.get('type')
-    cid = request.form.get('cid')
-
-    # Get image if it exists.
-    img = request.form.get('img')
-    pid = ""
-    if img != None:
-        pid = random_string_digits(4) + "p" + random_string_digits(8)
-        blobdata = blobify(img.split(',')[1])
-        upload_blob(blobdata,pid)
-
-    create_user(email, name, type, cid, pid)
-    return redirect("/otherpage")
-
-
-@app.route('/logout')
-def logout():
-    return render_template('login.html')
+#
+# @app.route('/register')
+# def register_page():
+#     id_token = request.cookies.get("token") # Check for firebase token
+#     error_message = None
+#     claims = None
+#
+#     if id_token:
+#         try:
+#             # Verify the token against the Firebase Auth API.
+#             claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+#             user_data = get_user(claims['email'])
+#
+#             # If there's no valid user data, this person needs to register first
+#             if user_data != False:
+#                 return redirect("/otherpage") #This user already exists, just go to homepage.
+#
+#             else: # User will have a form to fill up the information there
+#                 return render_template('register.html', user_data=claims, error_message=error_message)
+#
+#         except ValueError as exc:
+#             error_message = str(exc)
+#
+#     return render_template('login.html', user_data=claims, error_message=error_message)
+#
+# @app.route('/newuser', methods=['POST'])
+# def add_user_to_db():
+#     # create_user(email, name, type, cid, pic_id):
+#     email = request.form.get('email')
+#     name = request.form.get('name')
+#     type = request.form.get('type')
+#     cid = request.form.get('cid')
+#
+#     # Get image if it exists.
+#     img = request.form.get('img')
+#     pid = ""
+#     if img != None:
+#         pid = random_string_digits(4) + "p" + random_string_digits(8)
+#         blobdata = blobify(img.split(',')[1])
+#         upload_blob(blobdata,pid)
+#
+#     create_user(email, name, type, cid, pid)
+#     return redirect("/otherpage")
+#
+#
+# @app.route('/logout')
+# def logout():
+#     return render_template('login.html')
 
 ####################{SERVER FUNCTIONS END HERE}#########################
 
