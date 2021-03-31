@@ -38,7 +38,7 @@ def blobify(img_data):
 def upload_blob(file, destination_blob_name):
 
     storage_client = storage.Client() # Opens a storage client
-    bucket = storage_client.bucket("stickerbucket") #our bucket name
+    bucket = storage_client.bucket("postbucket") #our bucket name
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_string(file, content_type='image/png') #, content_type="image/png"
 
@@ -66,7 +66,7 @@ def upload_blob(file, destination_blob_name):
 
 # Creates a new user in the database with the information given
 # Returns a randomly generated userid that is associated with the user
-def create_user(email, name, type=1, cid=1, pic_id=1):
+def create_user(email, name):
     complete_key = datastore_client.key('User', email)
 
     task = datastore.Entity(key=complete_key)
@@ -97,7 +97,7 @@ def get_user(email):
 
 # Creates a post with ownership of UID & CID
 # Returns generated postID
-def create_post(uid, mid, title, description, cid=1):
+def create_post(uid, mid, title, description):
     random_postid = random_string_digits() + "p" + random_string_digits()
     complete_key = datastore_client.key('Posts', random_postid)
     task = datastore.Entity(key=complete_key)
@@ -214,7 +214,7 @@ def add_person_to_cid(email, cid):
 def quick_dash():
     return render_template('dashboard.html')
 
-@app.route('/all-posts')
+@app.route('/land')
 def quick_land():
     return render_template('landing.html')
 
@@ -226,8 +226,12 @@ def quick_log():
 def quick_post():
     return render_template('post.html')
 
+@app.route('/c2')
+def c2():
+    return render_template('create.html')
+
 @app.route('/create')
-def create_post():
+def create_post_page():
     id_token = request.cookies.get("token") # Check for firebase token
     error_message = None
     claims = None
@@ -240,7 +244,7 @@ def create_post():
 
             # If there's no valid user data, this person needs to register first
             if user_data != False:
-                return render_template('create.html', user_data=claims, error_message=error_message)
+                return render_template('create.html', user_data=user_data, error_message=error_message,)
             else:
                 return redirect("/")
 
@@ -304,7 +308,25 @@ def login_page():
             error_message = str(exc)
 
     return render_template('login.html', user_data=claims, error_message=error_message)
-#
+
+@app.route('/upload', methods=['POST'])
+def add_user_to_db():
+    # create_post(uid, mid, title, description, cid=1):
+    uid = request.form.get('uid')
+    title = request.form.get('title')
+    desc = request.form.get('desc')
+    #cid = request.form.get('cid')
+
+    img = request.form.get('img')
+    mid = ""
+    if img != None:
+        mid = random_string_digits(4) + "p" + random_string_digits(8)
+        blobdata = blobify(img.split(',')[1])
+        upload_blob(blobdata, mid)
+
+    create_post(uid, mid, title, desc)
+    return redirect("/otherpage")
+
 # @app.route('/register')
 # def register_page():
 #     id_token = request.cookies.get("token") # Check for firebase token
@@ -329,24 +351,7 @@ def login_page():
 #
 #     return render_template('login.html', user_data=claims, error_message=error_message)
 #
-# @app.route('/newuser', methods=['POST'])
-# def add_user_to_db():
-#     # create_user(email, name, type, cid, pic_id):
-#     email = request.form.get('email')
-#     name = request.form.get('name')
-#     type = request.form.get('type')
-#     cid = request.form.get('cid')
-#
-#     # Get image if it exists.
-#     img = request.form.get('img')
-#     pid = ""
-#     if img != None:
-#         pid = random_string_digits(4) + "p" + random_string_digits(8)
-#         blobdata = blobify(img.split(',')[1])
-#         upload_blob(blobdata,pid)
-#
-#     create_user(email, name, type, cid, pid)
-#     return redirect("/otherpage")
+
 #
 #
 # @app.route('/logout')

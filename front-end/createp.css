@@ -124,6 +124,19 @@ main .logo {
 	outline: none;
 }
 
+.login-main section textarea {
+	margin-top: 15px;
+	border-radius: 15px;
+	border: 1px solid var(--shadow-border-color);
+	width: 80%;
+	padding: 8px;
+	color: var(--std-grey-dark);
+}
+
+.login-main section textarea:focus {
+	outline: none;
+}
+
 .login-main section button {
 	margin-top: 15px;
 	background-color: var(--std-green);

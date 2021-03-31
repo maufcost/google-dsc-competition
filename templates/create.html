@@ -10,6 +10,19 @@
 				margin-bottom: 15px;
 				text-align: left;
 			}
+			.login-main section textarea {
+				margin-top: 15px;
+				border-radius: 15px;
+				border: 1px solid var(--shadow-border-color);
+				width: 80%;
+				padding: 8px;
+				color: var(--std-grey-dark);
+				height: 121px;
+			}
+
+			.login-main section textarea:focus {
+				outline: none;
+			}
 		</style>
 	<body>
 
@@ -24,11 +37,12 @@
 
 		<main class='login-main'>
 			<section>
-				<p>Create a new post</p> <br>
-
-				<p >Title</p> <input class='post' type='text' /><br/>
-				<p>Description</p> <textarea class='post' name="message" type="text" id="input-message" placeholder="Message"></textarea>
-				<button>Post</button><br />
+				<h1>Create a new post</h1> <hr>
+				<input class='post' type='hidden' name='uid' id='uid' value= "{{user_data['uid']}}">
+				<p >Title</p> <input class='post' type='text' name='title' id='title' value= ""/><br/>
+				<p>Description</p> <textarea  name="message" type="text" name='desc' id='desc' placeholder="Description..." value= ""></textarea>
+				<p>Image Upload </p> <input type="file" id="img" name="img" accept="image/png">
+				<button onclick='go()'>Post</button><br />
 				<!-- Put sign in with google thingy here (don't forget to add a margin top of 15px to it) -->
 			</section>
 		</main>
@@ -43,6 +57,42 @@
 				<li><a href='/login'>Login</a></li>
 			</ul>
 		</footer>
+		<script>
+			function post(path, params, method='post') {
 
+				// The rest of this code assumes you are not using a library.
+				// It can be made less wordy if you use one.
+				const form = document.createElement('form');
+				form.method = method;
+				form.action = path;
+
+				for (const key in params) {
+					if (params.hasOwnProperty(key)) {
+						const hiddenField = document.createElement('input');
+						hiddenField.type = 'hidden';
+						hiddenField.name = key;
+						hiddenField.value = params[key];
+
+						form.appendChild(hiddenField);
+					}
+				}
+
+				document.body.appendChild(form);
+				form.submit();
+			}
+
+			function go() {
+				const file = document.querySelector('input[type=file]').files[0];
+				const reader = new FileReader();
+
+				reader.addEventListener("load", function () {
+					post('/upload', {img:reader.result, title:document.getElementById("title").value, desc:document.getElementById("desc").value, uid:document.getElementById("uid").value})
+				}, false);
+
+				if (file) {
+					reader.readAsDataURL(file);
+				}
+			}
+		</script>
 	</body>
 </html>
