@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Report Hive | Create</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+		</head>
+		<style>
+			.post{
+				margin-bottom: 15px;
+				text-align: left;
+			}
+		</style>
+	<body>
+
+		<header class='login-header'>
+			<img class='logo' src="{{ url_for('static', filename='images/logo1.png') }}" />
+			<ul>
+				<li><a href='/all-posts'>INITIATIVES</a></li>
+				<li><a href='/all-posts'>LEADERBOARD</a></li>
+				<li><a class='special-link' href='/login'>LOGIN</a></li>
+			</ul>
+		</header>
+
+		<main class='login-main'>
+			<section>
+				<p>Create a new post</p> <br>
+
+				<p >Title</p> <input class='post' type='text' /><br/>
+				<p>Description</p> <textarea class='post' name="message" type="text" id="input-message" placeholder="Message"></textarea>
+				<button>Post</button><br />
+				<!-- Put sign in with google thingy here (don't forget to add a margin top of 15px to it) -->
+			</section>
+		</main>
+
+		<footer class='login-footer'>
+			<p><img src="{{ url_for('static', filename='images/logo2.png') }}" &copy;</p>
+			<ul>
+				<li><a href='/all-posts'>Initiatives</a></li>
+				<li><a href='/all-posts'>Leaderboard</a></li>
+				<li><a href='/login'>Contact</a></li>
+				<li><a href='/login'>Support</a></li>
+				<li><a href='/login'>Login</a></li>
+			</ul>
+		</footer>
+
+	</body>
+</html>

@@ -99,7 +99,7 @@ main .logo {
 	left: 0;
 	bottom: 0;
 	z-index: -1;
-	background: url('./static/green-sash.png');
+	background: url('images/green-sash.png');
 }
 
 .login-main section {
@@ -121,6 +121,19 @@ main .logo {
 }
 
 .login-main section input:focus {
+	outline: none;
+}
+
+.login-main section textarea {
+	margin-top: 15px;
+	border-radius: 15px;
+	border: 1px solid var(--shadow-border-color);
+	width: 80%;
+	padding: 8px;
+	color: var(--std-grey-dark);
+}
+
+.login-main section textarea:focus {
 	outline: none;
 }
 

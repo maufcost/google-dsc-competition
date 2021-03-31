@@ -2,9 +2,15 @@
 <html lang="en" dir="ltr">
 	<head>
 		<meta charset="utf-8">
-		<title>Report Hive | Home</title>
+		<title>Report Hive | All Posts</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
 		<script src="https://kit.fontawesome.com/cf30b19bdf.js" crossorigin="anonymous"></script>
+
+		<style>
+			a{
+				text-decoration: none;
+			}
+		</style>
 	</head>
 	<body>
 
@@ -32,12 +38,11 @@
 				<div class='feed-content-container'>
 					<header>
 						<div>
-							<h1>Share new initiatives at your company</h1>
-							<small>Any sustainable initiaves that others might use for their own businesses</small>
-						</div>
-						<button>+</button>
-					</header>
-
+							<h1> Posts Page | Share new initiatives in your organization</h1>
+							<small>Report your sustainable initiatives to encourage others to particiapte!</small>
+						</div><hr>
+						<a href="/create"><button>+</button></a>
+					</header>						<hr>
 					<div class='feed-content'>
 						<div class='post'>
 							<img src="{{ url_for('static', filename='images/food.jpeg') }}" />

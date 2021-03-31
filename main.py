@@ -66,18 +66,19 @@ def upload_blob(file, destination_blob_name):
 
 # Creates a new user in the database with the information given
 # Returns a randomly generated userid that is associated with the user
-def create_user(email, name, type, cid, pic_id):
+def create_user(email, name, type=1, cid=1, pic_id=1):
     complete_key = datastore_client.key('User', email)
 
     task = datastore.Entity(key=complete_key)
     random_uid = random_string_digits() + "u" + random_string_digits()
 
+    # Commented keys are for future features
     task.update({
         'uid': random_uid,
-        'name': name,
-        'type': type,
-        'cid': cid,
-        'pic_id': pic_id
+        'name': name
+        # 'type': type
+        #'cid': cid,
+        #'pic_id': pic_id
     })
 
     datastore_client.put(task)
@@ -96,7 +97,7 @@ def get_user(email):
 
 # Creates a post with ownership of UID & CID
 # Returns generated postID
-def create_post(uid, mid, description, cid):
+def create_post(uid, mid, title, description, cid=1):
     random_postid = random_string_digits() + "p" + random_string_digits()
     complete_key = datastore_client.key('Posts', random_postid)
     task = datastore.Entity(key=complete_key)
@@ -104,13 +105,15 @@ def create_post(uid, mid, description, cid):
     task.update({
         'uid': uid, # owner
         'mid': mid, # empty if no media, else str that correspond to GCS
-        'description': description,
-        'cid': cid # company associated with
+        'title': title,
+        'description': description
+        #'cid': cid # company associated with
     })
 
     datastore_client.put(task)
     return random_postid
 
+# Future Feature
 # Creates a comment owned by uid about postid with a content message
 # Returns the generated commentId for future features like reply, etc.
 def create_comment(postid, commid, uid, content):
@@ -128,6 +131,7 @@ def create_comment(postid, commid, uid, content):
     datastore_client.put(task)
     return random_commid
 
+# Future Feature
 # Get all comments from the post specified
 def get_comments_from_post(postid):
     query = datastore_client.query(kind='Comments')
@@ -136,7 +140,7 @@ def get_comments_from_post(postid):
     results = list(query.fetch())
     return results
 
-
+# Future Feature
 # Create a like entry in the database
 def like_post(postid, uid):
     the_key = postid + uid
@@ -150,11 +154,14 @@ def like_post(postid, uid):
 
     datastore_client.put(task)
 
+# Future Feature
 # Dislike the post by deleting the like entry
 def dislike_post(postid, uid):
     the_key = postid + uid
     key = datastore_client.key('Likes',the_key)
     datastore_client.delete(key)
+
+# Future Feature
 
 # Get the list of users that liked the post
 # as well as the count of likes using len()
@@ -163,6 +170,8 @@ def get_users_that_liked(postid):
     query.add_filter('postid', '=', postid)
     results = list(query.fetch())
     return results
+
+# Future Feature
 
 # Creates a company/organization
 # This is triggered only by new company representatives
@@ -184,6 +193,7 @@ def create_org(cname, pic_id, uid):
     datastore_client.put(task)
     return {'cid':random_cid, 'secret':random_secret_key}
 
+# Future Feature
 # Rewrite/Update the entry to add the user as a company representative
 def add_person_to_cid(email, cid):
     key = datastore_client.key('User',email)
@@ -200,11 +210,11 @@ def add_person_to_cid(email, cid):
 ####################{SERVER FUNCTIONS BEGIN HERE}#########################
 
 # Test template pages
-@app.route('/dash')
+@app.route('/all-posts')
 def quick_dash():
     return render_template('dashboard.html')
 
-@app.route('/land')
+@app.route('/all-posts')
 def quick_land():
     return render_template('landing.html')
 
@@ -212,16 +222,15 @@ def quick_land():
 def quick_log():
     return render_template('login.html')
 
-@app.route('/post')
+@app.route('/posts')
 def quick_post():
     return render_template('post.html')
 
-@app.route('/')
-def root():
+@app.route('/create')
+def create_post():
     id_token = request.cookies.get("token") # Check for firebase token
     error_message = None
     claims = None
-    currentAmountOfPoints = 0
 
     if id_token:
         try:
@@ -231,9 +240,63 @@ def root():
 
             # If there's no valid user data, this person needs to register first
             if user_data != False:
-                return redirect("/otherpage") #To change to main page perhaps
+                return render_template('create.html', user_data=claims, error_message=error_message)
             else:
-                return redirect("/register")
+                return redirect("/")
+
+        except ValueError as exc:
+            # This will be raised if the token is expired or any other
+            # verification checks fail.
+            error_message = str(exc)
+
+    return render_template('landing.html', user_data=claims, error_message=error_message)
+#
+@app.route('/')
+def root():
+    id_token = request.cookies.get("token") # Check for firebase token
+    error_message = None
+    claims = None
+
+    if id_token:
+        try:
+            # Verify the token against the Firebase Auth API.
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+            user_data = get_user(claims['email'])
+
+            # If there's no valid user data, this person needs to register first
+            if user_data != False:
+                return redirect("/all-posts")
+            else:
+                #create_user(email, name, type=1, cid=1, pic_id=1
+                create_user(claims['email'], claims['name'])
+                return redirect("/all-posts")
+
+        except ValueError as exc:
+            # This will be raised if the token is expired or any other
+            # verification checks fail.
+            error_message = str(exc)
+
+    return render_template('landing.html', user_data=claims, error_message=error_message)
+
+@app.route('/login')
+def login_page():
+    id_token = request.cookies.get("token") # Check for firebase token
+    error_message = None
+    claims = None
+
+    if id_token:
+        try:
+            # Verify the token against the Firebase Auth API.
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+            user_data = get_user(claims['email'])
+
+            # If there's no valid user data, this person needs to register first
+            if user_data != False:
+                return redirect("/all-posts")
+            else:
+                #create_user(email, name, type=1, cid=1, pic_id=1
+                create_user(claims['email'], claims['name'])
+                return redirect("/all-posts")
 
         except ValueError as exc:
             # This will be raised if the token is expired or any other
