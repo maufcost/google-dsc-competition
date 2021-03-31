@@ -1,4 +1,8 @@
-Flask==1.1.1
-google-cloud-datastore==1.10.0
-google-auth==1.11.2
-requests==2.22.0
+Flask>=1.1.1
+google-cloud-core>=1.6.0
+google-api-core>=1.26.3
+google-cloud-datastore>=2.1.0
+google-cloud-storage>=1.37.0
+google-auth>=1.28.0
+requests>=2.22.0
+grpcio>=1.36.0

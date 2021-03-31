@@ -9,12 +9,11 @@ from datetime import date
 
 # Import required modules for Flask execution
 from flask import Flask, render_template, request, redirect
-
+#
 # Google Cloud product modules
 from google.auth.transport import requests
-from google.cloud import datastore
+from google.cloud import datastore, storage
 import google.oauth2.id_token
-from google.cloud import storage
 
 # Initialize objects to handle Authentication, database storage, and FLask
 firebase_request_adapter = requests.Request()
@@ -43,28 +42,6 @@ def upload_blob(file, destination_blob_name):
     bucket = storage_client.bucket("postbucket") #our bucket name
     blob = bucket.blob(destination_blob_name)
     blob.upload_from_string(file, content_type='image/png') #, content_type="image/png"
-
-####################{UTILITY FUNCTIONS END HERE}#######################
-
-
-
-# def store_time(dt):
-#     entity = datastore.Entity(key=datastore_client.key('visit'))
-#     entity.update({
-#         'timestamp': dt
-#     })
-#
-#     datastore_client.put(entity)
-# def fetch_times(limit):
-#     query = datastore_client.query(kind='visit')
-#     query.order = ['-timestamp']
-#
-#     times = query.fetch(limit=limit)
-#
-#     return times
-
-####################{DATABASE FUNCTIONS BEGIN HERE}#########################
-
 
 # Creates a new user in the database with the information given
 # Returns a randomly generated userid that is associated with the user
@@ -416,37 +393,6 @@ def add_user_to_db():
 
     create_post(uid, mid, title, desc)
     return redirect("/all-posts")
-
-# @app.route('/register')
-# def register_page():
-#     id_token = request.cookies.get("token") # Check for firebase token
-#     error_message = None
-#     claims = None
-#
-#     if id_token:
-#         try:
-#             # Verify the token against the Firebase Auth API.
-#             claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
-#             user_data = get_user(claims['email'])
-#
-#             # If there's no valid user data, this person needs to register first
-#             if user_data != False:
-#                 return redirect("/otherpage") #This user already exists, just go to homepage.
-#
-#             else: # User will have a form to fill up the information there
-#                 return render_template('register.html', user_data=claims, error_message=error_message)
-#
-#         except ValueError as exc:
-#             error_message = str(exc)
-#
-#     return render_template('login.html', user_data=claims, error_message=error_message)
-#
-
-#
-#
-# @app.route('/logout')
-# def logout():
-#     return render_template('login.html')
 
 ####################{SERVER FUNCTIONS END HERE}#########################
 
