@@ -5,6 +5,8 @@ import random
 import json
 import base64
 import random
+from datetime import date
+
 # Import required modules for Flask execution
 from flask import Flask, render_template, request, redirect
 
@@ -101,18 +103,33 @@ def create_post(uid, mid, title, description):
     random_postid = random_string_digits() + "p" + random_string_digits()
     complete_key = datastore_client.key('Posts', random_postid)
     task = datastore.Entity(key=complete_key)
+    today = date.today()
 
+    # dd/mm/YY
+    d1 = today.strftime("%d/%m/%Y")
     task.update({
         'uid': uid, # owner
         'mid': mid, # empty if no media, else str that correspond to GCS
         'title': title,
-        'description': description
+        'description': description,
+        'ts': time.time(),
+        'date': d1
         #'cid': cid # company associated with
     })
 
     datastore_client.put(task)
     return random_postid
 
+def get_post_by_id(pid):
+    complete_key = datastore_client.key('Posts', pid)
+    query = datastore_client.get(complete_key)
+    return query
+
+def get_posts():
+    query = datastore_client.query(kind='Posts')
+    query.order = ["ts"] #Order by timestamp from the most recent first
+    results = list(query.fetch())
+    return results
 # Future Feature
 # Creates a comment owned by uid about postid with a content message
 # Returns the generated commentId for future features like reply, etc.
@@ -210,9 +227,6 @@ def add_person_to_cid(email, cid):
 ####################{SERVER FUNCTIONS BEGIN HERE}#########################
 
 # Test template pages
-@app.route('/all-posts')
-def quick_dash():
-    return render_template('dashboard.html')
 
 @app.route('/land')
 def quick_land():
@@ -229,6 +243,66 @@ def quick_post():
 @app.route('/c2')
 def c2():
     return render_template('create.html')
+
+@app.route('/post/<pid>')
+def individual_post_page(pid):
+    id_token = request.cookies.get("token") # Check for firebase token
+    error_message = None
+    claims = None
+
+    if id_token:
+        try:
+            # Verify the token against the Firebase Auth API.
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+            user_data = get_user(claims['email'])
+
+            # If there's no valid user data, this person needs to register first
+            if user_data != False:
+                the_post = get_post_by_id(pid)
+                print(the_post)
+                # print(all_posts[0].key)
+                # print(all_posts[0].key.__dict__)
+
+                return render_template('post.html', user_data=user_data, post=the_post)
+            else:
+                return redirect("/")
+
+        except ValueError as exc:
+            # This will be raised if the token is expired or any other
+            # verification checks fail.
+            error_message = str(exc)
+
+    return render_template('landing.html', user_data=claims, error_message=error_message)
+
+@app.route('/all-posts')
+def all_posts_page():
+    id_token = request.cookies.get("token") # Check for firebase token
+    error_message = None
+    claims = None
+
+    if id_token:
+        try:
+            # Verify the token against the Firebase Auth API.
+            claims = google.oauth2.id_token.verify_firebase_token(id_token, firebase_request_adapter)
+            user_data = get_user(claims['email'])
+
+            # If there's no valid user data, this person needs to register first
+            if user_data != False:
+                all_posts = get_posts()
+                print(all_posts)
+                # print(all_posts[0].key)
+                # print(all_posts[0].key.__dict__)
+
+                return render_template('dashboard.html', user_data=user_data, posts=all_posts)
+            else:
+                return redirect("/")
+
+        except ValueError as exc:
+            # This will be raised if the token is expired or any other
+            # verification checks fail.
+            error_message = str(exc)
+
+    return render_template('landing.html', user_data=claims, error_message=error_message)
 
 @app.route('/create')
 def create_post_page():
@@ -325,7 +399,7 @@ def add_user_to_db():
         upload_blob(blobdata, mid)
 
     create_post(uid, mid, title, desc)
-    return redirect("/otherpage")
+    return redirect("/all-posts")
 
 # @app.route('/register')
 # def register_page():

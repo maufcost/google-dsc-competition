@@ -44,16 +44,20 @@
 						<a href="/create"><button>+</button></a>
 					</header>						<hr>
 					<div class='feed-content'>
-						<div class='post'>
-							<img src="{{ url_for('static', filename='images/food.jpeg') }}" />
-							<div class='content'>
-								<div class='content-gist'>
-									<h1>How Google distributes extra energy</h1>
-									<p>Learn how businesses can do the same</p>
+
+						{% for each_post in posts %}
+							 <a href="/post/{{each_post.key.name}}"> <div class='post'>
+								<!-- <img src="{{ url_for('static', filename='images/food.jpeg') }}" /> -->
+								<img src="https://storage.googleapis.com/postbucket/{{each_post['mid']}}" />
+								<div class='content'>
+									<div class='content-gist'>
+										<h1>{{each_post['title']}}</h1>
+										<p>{{each_post['description'][0:100]}}</p>
+									</div>
+									<small>{{each_post['date']}}</small>
 								</div>
-								<small>Sep 24, 2052</small>
-							</div>
-						</div>
+							</div> </a>
+						{% endfor %}
 
 						<div class='post'>
 							<img src="{{ url_for('static', filename='images/solar.jpeg') }}"/>
